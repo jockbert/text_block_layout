@@ -30,12 +30,12 @@ impl Block {
         }
     }
 
-    /** Create block of given width and height 0, filled with spaces. */
+    /** Create block of given width and height 0. */
     pub fn of_width(width: usize) -> Block {
         Block::empty().pad_right(width)
     }
 
-    /** Create block of given height and width 0, filled with spaces. */
+    /** Create block of given height and width 0. */
     pub fn of_height(height: usize) -> Block {
         Block::empty().pad_bottom_to_height(height)
     }
@@ -115,8 +115,8 @@ impl Block {
         }
     }
 
-    /** Glue togeter two blocks horizontally, one to the left and the given
-    argument to the right. Differences in height will be compensated for by
+    /** Glue togeter two blocks horizontally, self to the left and the given
+    block to the right. Differences in height will be compensated for by
     padding on bottom of blocks. */
     pub fn left_of(&self, right: &Block) -> Block {
         let left_padded = self.pad_bottom_to_height(right.height());
@@ -135,8 +135,8 @@ impl Block {
         }
     }
 
-    /** Glue together tow blocks vertically, one on the top and the given
-    argument on the bottom. Differences in width will be compensated for by
+    /** Glue together two blocks vertically, self on the top and the given
+    block on the bottom. Differences in width will be compensated for by
     padding on right side of blocks. */
     pub fn above(&self, bottom: Block) -> Block {
         let top_padded = self.pad_right_to_width(bottom.width);
