@@ -155,9 +155,15 @@ impl Block {
         }
     }
 
-    /** Render a string from a block using '\n' as separator between lines */
+    /** Render a string from a block using '\n' as separator between lines.
+    Trims away whitespace on the right side of each line, just to save on final
+    string length. */
     pub fn render(&self) -> String {
-        self.lines.join("\n")
+        self.lines
+            .iter()
+            .map(|line| line.trim_end())
+            .collect::<Vec<_>>()
+            .join("\n")
     }
 }
 
@@ -166,13 +172,26 @@ mod test {
     use super::*;
 
     #[test]
-    pub fn above() {
+    fn above() {
         let a = Block::of_text("aaa");
         let b = Block::of_text("b").add_line("b").pad_left(1);
 
         assert_eq!("aaa", a.render());
         assert_eq!(" b\n b", b.render());
 
-        assert_eq!("aaa\n b \n b ", a.above(b).render());
+        assert_eq!("aaa\n b\n b", a.above(b).render());
+    }
+
+    #[test]
+    fn trim_right_side_of_lines() {
+        // Do not trim whitespace at left or middle of line
+        let b = Block::of_text(" a a   ")
+            // After trimming, these lines has other width than first line
+            .add_line("bbbbb  ")
+            .add_line("c  ")
+            // These two empty lines should be trimmed down to zero lenght
+            .pad_bottom(2);
+
+        assert_eq!(" a a\nbbbbb\nc\n\n", b.render());
     }
 }
