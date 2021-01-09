@@ -7,8 +7,7 @@ description = "Library for joining together blocks of text characters, in for ex
 repository = "https://github.com/jockbert/text-block-layout"
 license = "MIT"
 keywords = ["TUI", "block", "box", "text", "layout"]
-
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+readme = "README.md"
+categories = ["visualization"]
 
 [dependencies]
