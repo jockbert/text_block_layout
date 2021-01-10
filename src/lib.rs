@@ -297,6 +297,30 @@ impl Block {
     }
 }
 
+impl From<char> for Block {
+    fn from(text: char) -> Self {
+        Block::of_text(&text.to_string())
+    }
+}
+
+impl From<&str> for Block {
+    fn from(text: &str) -> Self {
+        Block::of_text(text)
+    }
+}
+
+impl From<String> for Block {
+    fn from(text: String) -> Self {
+        Block::of_text(&text)
+    }
+}
+
+impl ToString for Block {
+    fn to_string(&self) -> String {
+        self.render()
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
