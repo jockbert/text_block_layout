@@ -97,6 +97,10 @@ impl Block {
         Block::of_width(width).left_of(self)
     }
 
+    pub fn pad_top(&self, height: usize) -> Block {
+        Block::of_height(height).above(self)
+    }
+
     /** Pad bottom side of block with given number of empty lines. */
     pub fn pad_bottom(&self, height: usize) -> Block {
         self.fill_bottom(height, ' ')
