@@ -71,7 +71,7 @@ impl Block {
 
     /** Create block of given height and width 0. */
     pub fn of_height(height: usize) -> Block {
-        Block::empty().pad_bottom_to_height(height)
+        Block::empty().pad_to_height_bottom(height)
     }
 
     /** Create block containing given text. Gets width of the text and height 1. */
@@ -146,19 +146,19 @@ impl Block {
     }
 
     /** Pad right so given width is reached. Wider block is untouched. */
-    pub fn pad_right_to_width(&self, width: usize) -> Block {
+    pub fn pad_to_width_right(&self, width: usize) -> Block {
         self.pad_right(subtract_or_zero(width, self.width))
     }
 
     /** Pad left so given width is reached. Wider block is untouched. */
-    pub fn pad_left_to_width(&self, width: usize) -> Block {
+    pub fn pad_to_width_left(&self, width: usize) -> Block {
         self.pad_left(subtract_or_zero(width, self.width))
     }
 
     /** Pad both sides so given width is reached. Wider block is untouched.
     If padding needs to be uneven, there will be more padding on the
     right side. */
-    pub fn pad_center_right_to_width(&self, width: usize) -> Block {
+    pub fn pad_to_width_center_right(&self, width: usize) -> Block {
         let padding = subtract_or_zero(width, self.width);
         let padding_left = padding / 2;
         let padding_right = padding - padding_left;
@@ -168,7 +168,7 @@ impl Block {
     /** Pad both sides so given width is reached. Wider block is untouched.
     If padding needs to be uneven, there will be more padding on the
     left side. */
-    pub fn pad_center_left_to_width(&self, width: usize) -> Block {
+    pub fn pad_to_width_center_left(&self, width: usize) -> Block {
         let padding = subtract_or_zero(width, self.width);
         let padding_right = padding / 2;
         let padding_left = padding - padding_right;
@@ -176,19 +176,19 @@ impl Block {
     }
 
     /** Pad top so given height is reached. Higher block is untouched. */
-    pub fn pad_top_to_height(&self, height: usize) -> Block {
+    pub fn pad_to_height_top(&self, height: usize) -> Block {
         self.pad_top(subtract_or_zero(height, self.height()))
     }
 
     /** Pad bottom so given height is reached. Higher block is untouched. */
-    pub fn pad_bottom_to_height(&self, height: usize) -> Block {
+    pub fn pad_to_height_bottom(&self, height: usize) -> Block {
         self.pad_bottom(subtract_or_zero(height, self.height()))
     }
 
     /** Pad both top and bottom so given height is reached. Higher block is
     untouched. If padding needs to be uneven, there will be more padding on the
     top side. */
-    pub fn pad_center_top_to_height(&self, height: usize) -> Block {
+    pub fn pad_to_height_center_top(&self, height: usize) -> Block {
         let padding = subtract_or_zero(height, self.height());
         let padding_bottom = padding / 2;
         let padding_top = padding - padding_bottom;
@@ -198,7 +198,7 @@ impl Block {
     /** Pad both top and bottom so given height is reached. Higher block is
     untouched. If padding needs to be uneven, there will be more padding on the
     bottom side. */
-    pub fn pad_center_bottom_to_height(&self, height: usize) -> Block {
+    pub fn pad_to_height_center_bottom(&self, height: usize) -> Block {
         let padding = subtract_or_zero(height, self.height());
         let padding_top = padding / 2;
         let padding_bottom = padding - padding_top;
@@ -209,8 +209,8 @@ impl Block {
     block to the right, aligning the top side of the blocks. */
     pub fn beside_top(&self, right: &Block) -> Block {
         beside_same_height(
-            &self.pad_bottom_to_height(right.height()),
-            &right.pad_bottom_to_height(self.height()),
+            &self.pad_to_height_bottom(right.height()),
+            &right.pad_to_height_bottom(self.height()),
         )
     }
 
@@ -218,8 +218,8 @@ impl Block {
     block to the right, aligning the bottom side of the blocks. */
     pub fn beside_bottom(&self, right: &Block) -> Block {
         beside_same_height(
-            &self.pad_top_to_height(right.height()),
-            &right.pad_top_to_height(self.height()),
+            &self.pad_to_height_top(right.height()),
+            &right.pad_to_height_top(self.height()),
         )
     }
 
@@ -229,8 +229,8 @@ impl Block {
     top side. */
     pub fn beside_center_bottom(&self, right: &Block) -> Block {
         beside_same_height(
-            &self.pad_center_top_to_height(right.height()),
-            &right.pad_center_top_to_height(self.height()),
+            &self.pad_to_height_center_top(right.height()),
+            &right.pad_to_height_center_top(self.height()),
         )
     }
 
@@ -240,8 +240,8 @@ impl Block {
     bottom side. */
     pub fn beside_center_top(&self, right: &Block) -> Block {
         beside_same_height(
-            &self.pad_center_bottom_to_height(right.height()),
-            &right.pad_center_bottom_to_height(self.height()),
+            &self.pad_to_height_center_bottom(right.height()),
+            &right.pad_to_height_center_bottom(self.height()),
         )
     }
 
@@ -249,8 +249,8 @@ impl Block {
     block on the bottom, aligning the right side of the blocks. */
     pub fn stack_right(&self, bottom: &Block) -> Block {
         stack_same_width(
-            &self.pad_left_to_width(bottom.width),
-            &bottom.pad_left_to_width(self.width),
+            &self.pad_to_width_left(bottom.width),
+            &bottom.pad_to_width_left(self.width),
         )
     }
 
@@ -258,8 +258,8 @@ impl Block {
     block on the bottom, aligning the left side of the blocks. */
     pub fn stack_left(&self, bottom: &Block) -> Block {
         stack_same_width(
-            &self.pad_right_to_width(bottom.width),
-            &bottom.pad_right_to_width(self.width),
+            &self.pad_to_width_right(bottom.width),
+            &bottom.pad_to_width_right(self.width),
         )
     }
 
@@ -269,8 +269,8 @@ impl Block {
     right side. */
     pub fn stack_center_left(&self, bottom: &Block) -> Block {
         stack_same_width(
-            &self.pad_center_right_to_width(bottom.width),
-            &bottom.pad_center_right_to_width(self.width),
+            &self.pad_to_width_center_right(bottom.width),
+            &bottom.pad_to_width_center_right(self.width),
         )
     }
 
@@ -280,8 +280,8 @@ impl Block {
     left side. */
     pub fn stack_center_right(&self, bottom: &Block) -> Block {
         stack_same_width(
-            &self.pad_center_left_to_width(bottom.width),
-            &bottom.pad_center_left_to_width(self.width),
+            &self.pad_to_width_center_left(bottom.width),
+            &bottom.pad_to_width_center_left(self.width),
         )
     }
 
