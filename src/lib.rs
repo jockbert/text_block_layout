@@ -155,6 +155,26 @@ impl Block {
         self.pad_left(subtract_or_zero(width, self.width))
     }
 
+    /** Pad both sides so given width is reached. Wider block is untouched.
+    If padding needs to be uneven, there will be more padding on the
+    right side. */
+    pub fn pad_center_right_to_width(&self, width: usize) -> Block {
+        let padding = subtract_or_zero(width, self.width);
+        let padding_left = padding / 2;
+        let padding_right = padding - padding_left;
+        self.pad_left(padding_left).pad_right(padding_right)
+    }
+
+    /** Pad both sides so given width is reached. Wider block is untouched.
+    If padding needs to be uneven, there will be more padding on the
+    left side. */
+    pub fn pad_center_left_to_width(&self, width: usize) -> Block {
+        let padding = subtract_or_zero(width, self.width);
+        let padding_right = padding / 2;
+        let padding_left = padding - padding_right;
+        self.pad_left(padding_left).pad_right(padding_right)
+    }
+
     /** Pad top so given height is reached. Higher block is untouched. */
     pub fn pad_top_to_height(&self, height: usize) -> Block {
         self.pad_top(subtract_or_zero(height, self.height()))
@@ -163,6 +183,26 @@ impl Block {
     /** Pad bottom so given height is reached. Higher block is untouched. */
     pub fn pad_bottom_to_height(&self, height: usize) -> Block {
         self.pad_bottom(subtract_or_zero(height, self.height()))
+    }
+
+    /** Pad both top and bottom so given height is reached. Higher block is
+    untouched. If padding needs to be uneven, there will be more padding on the
+    top side. */
+    pub fn pad_center_top_to_height(&self, height: usize) -> Block {
+        let padding = subtract_or_zero(height, self.height());
+        let padding_bottom = padding / 2;
+        let padding_top = padding - padding_bottom;
+        self.pad_bottom(padding_bottom).pad_top(padding_top)
+    }
+
+    /** Pad both top and bottom so given height is reached. Higher block is
+    untouched. If padding needs to be uneven, there will be more padding on the
+    bottom side. */
+    pub fn pad_center_bottom_to_height(&self, height: usize) -> Block {
+        let padding = subtract_or_zero(height, self.height());
+        let padding_top = padding / 2;
+        let padding_bottom = padding - padding_top;
+        self.pad_bottom(padding_bottom).pad_top(padding_top)
     }
 
     /** Join two blocks horizontally, self to the left and the given
@@ -183,6 +223,28 @@ impl Block {
         )
     }
 
+    /** Join two blocks horizontally, self to the left and the given
+    block to the right, aligning the center of the blocks.
+    If padding needs to be uneven, there will be more padding on the
+    top side. */
+    pub fn beside_center_bottom(&self, right: &Block) -> Block {
+        beside_same_height(
+            &self.pad_center_top_to_height(right.height()),
+            &right.pad_center_top_to_height(self.height()),
+        )
+    }
+
+    /** Join two blocks horizontally, self to the left and the given
+    block to the right, aligning the center of the blocks.
+    If padding needs to be uneven, there will be more padding on the
+    bottom side. */
+    pub fn beside_center_top(&self, right: &Block) -> Block {
+        beside_same_height(
+            &self.pad_center_bottom_to_height(right.height()),
+            &right.pad_center_bottom_to_height(self.height()),
+        )
+    }
+
     /** Join two blocks vertically, self on the top and the given
     block on the bottom, aligning the right side of the blocks. */
     pub fn stack_right(&self, bottom: &Block) -> Block {
@@ -198,6 +260,28 @@ impl Block {
         stack_same_width(
             &self.pad_right_to_width(bottom.width),
             &bottom.pad_right_to_width(self.width),
+        )
+    }
+
+    /** Join two blocks vertically, self on the top and the given
+    block on the bottom, aligning the center of the blocks.
+    If padding needs to be uneven, there will be more padding on the
+    right side. */
+    pub fn stack_center_left(&self, bottom: &Block) -> Block {
+        stack_same_width(
+            &self.pad_center_right_to_width(bottom.width),
+            &bottom.pad_center_right_to_width(self.width),
+        )
+    }
+
+    /** Join two blocks vertically, self on the top and the given
+    block on the bottom, aligning the center of the blocks.
+    If padding needs to be uneven, there will be more padding on the
+    left side. */
+    pub fn stack_center_right(&self, bottom: &Block) -> Block {
+        stack_same_width(
+            &self.pad_center_left_to_width(bottom.width),
+            &bottom.pad_center_left_to_width(self.width),
         )
     }
 
