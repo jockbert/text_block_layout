@@ -1,7 +1,7 @@
 use unicode_width::UnicodeWidthStr;
 
 /** Represents a block of some width an height containing text. */
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Block {
     width: usize,
     lines: Vec<String>,
