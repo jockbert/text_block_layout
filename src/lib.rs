@@ -21,6 +21,15 @@ fn adjust_to_len(original: &str, length: usize) -> String {
     result
 }
 
+/** Subract usizes and clamp to positive results. */
+fn subtract_or_zero(a: usize, b: usize) -> usize {
+    if a > b {
+        a - b
+    } else {
+        0
+    }
+}
+
 impl Block {
     /** Create empty block with width and height zero */
     pub fn empty() -> Block {
@@ -106,22 +115,24 @@ impl Block {
         self.fill_bottom(height, ' ')
     }
 
-    /** Pad right so given width is reached. */
+    /** Pad right so given width is reached. Wider block is untouched. */
     pub fn pad_right_to_width(&self, width: usize) -> Block {
-        if width > self.width {
-            self.pad_right(width - self.width)
-        } else {
-            self.clone()
-        }
+        self.pad_right(subtract_or_zero(width, self.width))
     }
 
-    /** Pad bottom so given height is reached. */
+    /** Pad left so given width is reached. Wider block is untouched. */
+    pub fn pad_left_to_width(&self, width: usize) -> Block {
+        self.pad_left(subtract_or_zero(width, self.width))
+    }
+
+    /** Pad top so given height is reached. Higher block is untouched. */
+    pub fn pad_top_to_height(&self, height: usize) -> Block {
+        self.pad_top(subtract_or_zero(height, self.height()))
+    }
+
+    /** Pad bottom so given height is reached. Higher block is untouched. */
     pub fn pad_bottom_to_height(&self, height: usize) -> Block {
-        if height > self.height() {
-            self.pad_bottom(height - self.height())
-        } else {
-            self.clone()
-        }
+        self.pad_bottom(subtract_or_zero(height, self.height()))
     }
 
     /** Glue togeter two blocks horizontally, self to the left and the given
