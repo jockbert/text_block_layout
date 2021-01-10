@@ -116,7 +116,10 @@ impl Block {
             .map(|line| line.to_string() + &suffix)
             .collect::<Vec<String>>();
 
-        Block { width, lines }
+        Block {
+            width: self.width + width,
+            lines,
+        }
     }
 
     /** Fill bottom side of block with given number of the filler character. */
