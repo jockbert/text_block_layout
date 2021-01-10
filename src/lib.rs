@@ -1,3 +1,5 @@
+use unicode_width::UnicodeWidthStr;
+
 /** Represents a block of some width an height containing text. */
 #[derive(Clone)]
 pub struct Block {
@@ -85,7 +87,11 @@ impl Block {
 
     /** Create block containing given text. Gets width of the text and height 1. */
     pub fn of_text(text: &str) -> Block {
-        Block::of_width(text.len()).add_line(text)
+        let width = UnicodeWidthStr::width(text);
+        Block {
+            width,
+            lines: vec![text.to_string()],
+        }
     }
 
     /** Return height of block. */

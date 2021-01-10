@@ -11,3 +11,4 @@ readme = "README.md"
 categories = ["visualization"]
 
 [dependencies]
+unicode-width = "0.1.5"
