@@ -147,7 +147,7 @@ impl Block {
     /** Glue together two blocks vertically, self on the top and the given
     block on the bottom. Differences in width will be compensated for by
     padding on right side of blocks. */
-    pub fn above(&self, bottom: Block) -> Block {
+    pub fn above(&self, bottom: &Block) -> Block {
         let top_padded = self.pad_right_to_width(bottom.width);
         let bottom_padded = bottom.pad_right_to_width(self.width);
 
@@ -188,7 +188,7 @@ mod test {
         assert_eq!("aaa", a.render());
         assert_eq!(" b\n b", b.render());
 
-        assert_eq!("aaa\n b\n b", a.above(b).render());
+        assert_eq!("aaa\n b\n b", a.above(&b).render());
     }
 
     #[test]
