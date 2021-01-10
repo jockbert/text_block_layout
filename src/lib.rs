@@ -30,6 +30,40 @@ fn subtract_or_zero(a: usize, b: usize) -> usize {
     }
 }
 
+/** Join two blocks vertically, requiring blocks to have same width. */
+fn stack_same_width(top: &Block, bottom: &Block) -> Block {
+    assert_eq!(top.width(), bottom.width());
+
+    let lines = top
+        .lines
+        .iter()
+        .cloned()
+        .chain(bottom.lines.iter().cloned())
+        .collect::<Vec<String>>();
+
+    Block {
+        width: top.width,
+        lines,
+    }
+}
+
+/** Join two blocks horizontally, requiring blocks to have same height. */
+pub fn beside_same_height(left: &Block, right: &Block) -> Block {
+    assert_eq!(left.height(), right.height());
+
+    let lines = left
+        .lines
+        .iter()
+        .zip(right.lines.iter())
+        .map(|a| a.0.to_string() + a.1)
+        .collect::<Vec<String>>();
+
+    Block {
+        width: left.width + right.width,
+        lines,
+    }
+}
+
 impl Block {
     /** Create empty block with width and height zero */
     pub fn empty() -> Block {
@@ -103,11 +137,11 @@ impl Block {
 
     /** Pad left side of block with given number of spaces. */
     pub fn pad_left(&self, width: usize) -> Block {
-        Block::of_width(width).left_of(self)
+        Block::of_width(width).beside_top(self)
     }
 
     pub fn pad_top(&self, height: usize) -> Block {
-        Block::of_height(height).above(self)
+        Block::of_height(height).stack_left(self)
     }
 
     /** Pad bottom side of block with given number of empty lines. */
@@ -135,44 +169,40 @@ impl Block {
         self.pad_bottom(subtract_or_zero(height, self.height()))
     }
 
-    /** Glue togeter two blocks horizontally, self to the left and the given
-    block to the right. Differences in height will be compensated for by
-    padding on bottom of blocks. */
-    pub fn left_of(&self, right: &Block) -> Block {
-        let left_padded = self.pad_bottom_to_height(right.height());
-        let right_padded = right.pad_bottom_to_height(self.height());
-
-        let lines = left_padded
-            .lines
-            .iter()
-            .zip(right_padded.lines.iter())
-            .map(|a| a.0.to_string() + a.1)
-            .collect::<Vec<String>>();
-
-        Block {
-            width: left_padded.width + right_padded.width,
-            lines,
-        }
+    /** Join two blocks horizontally, self to the left and the given
+    block to the right, aligning the top side of the blocks. */
+    pub fn beside_top(&self, right: &Block) -> Block {
+        beside_same_height(
+            &self.pad_bottom_to_height(right.height()),
+            &right.pad_bottom_to_height(self.height()),
+        )
     }
 
-    /** Glue together two blocks vertically, self on the top and the given
-    block on the bottom. Differences in width will be compensated for by
-    padding on right side of blocks. */
-    pub fn above(&self, bottom: &Block) -> Block {
-        let top_padded = self.pad_right_to_width(bottom.width);
-        let bottom_padded = bottom.pad_right_to_width(self.width);
+    /** Join two blocks horizontally, self to the left and the given
+    block to the right, aligning the bottom side of the blocks. */
+    pub fn beside_bottom(&self, right: &Block) -> Block {
+        beside_same_height(
+            &self.pad_top_to_height(right.height()),
+            &right.pad_top_to_height(self.height()),
+        )
+    }
 
-        let lines = top_padded
-            .lines
-            .iter()
-            .cloned()
-            .chain(bottom_padded.lines.iter().cloned())
-            .collect::<Vec<String>>();
+    /** Join two blocks vertically, self on the top and the given
+    block on the bottom, aligning the right side of the blocks. */
+    pub fn stack_right(&self, bottom: &Block) -> Block {
+        stack_same_width(
+            &self.pad_left_to_width(bottom.width),
+            &bottom.pad_left_to_width(self.width),
+        )
+    }
 
-        Block {
-            width: top_padded.width,
-            lines,
-        }
+    /** Join two blocks vertically, self on the top and the given
+    block on the bottom, aligning the left side of the blocks. */
+    pub fn stack_left(&self, bottom: &Block) -> Block {
+        stack_same_width(
+            &self.pad_right_to_width(bottom.width),
+            &bottom.pad_right_to_width(self.width),
+        )
     }
 
     /** Render a string from a block using '\n' as separator between lines.
@@ -199,7 +229,7 @@ mod test {
         assert_eq!("aaa", a.render());
         assert_eq!(" b\n b", b.render());
 
-        assert_eq!("aaa\n b\n b", a.above(&b).render());
+        assert_eq!("aaa\n b\n b", a.stack_left(&b).render());
     }
 
     #[test]
