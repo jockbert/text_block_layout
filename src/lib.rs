@@ -12,17 +12,6 @@ fn repeat(c: char, times: usize) -> String {
     std::iter::repeat(c).take(times).collect::<String>()
 }
 
-/** Adjust the length of string to be exactly the given length. Too long
-strings are truncated and to short strings are padded wuth spaces at the end. */
-fn adjust_to_len(original: &str, length: usize) -> String {
-    let mut result = original.to_string();
-    result.truncate(length);
-
-    let suffix = repeat(' ', length - result.len());
-    result.push_str(&suffix);
-    result
-}
-
 /** Subract usizes and clamp to positive results. */
 fn subtract_or_zero(a: usize, b: usize) -> usize {
     if a > b {
@@ -104,12 +93,10 @@ impl Block {
         self.width
     }
 
-    /** Add given text at bottom of block, incementing the height */
-    pub fn add_line(&self, text: &str) -> Block {
-        let mut result = self.clone();
-        // TODO text is not padded / truncades correctly
-        result.lines.push(adjust_to_len(text, result.width));
-        result
+    /** Add given text at bottom of block, incementing the height. Width of
+    block will be increased if needed for added line to fit.*/
+    pub fn add_text(&self, text: &str) -> Block {
+        self.stack_left(&Block::of_text(text))
     }
 
     /** Fill right side of block with given number of the filler character. */
@@ -233,7 +220,7 @@ mod test {
     #[test]
     fn above() {
         let a = Block::of_text("aaa");
-        let b = Block::of_text("b").add_line("b").pad_left(1);
+        let b = Block::of_text("b").add_text("b").pad_left(1);
 
         assert_eq!("aaa", a.render());
         assert_eq!(" b\n b", b.render());
@@ -246,8 +233,8 @@ mod test {
         // Do not trim whitespace at left or middle of line
         let b = Block::of_text(" a a   ")
             // After trimming, these lines has other width than first line
-            .add_line("bbbbb  ")
-            .add_line("c  ")
+            .add_text("bbbbb  ")
+            .add_text("c  ")
             // These two empty lines should be trimmed down to zero lenght
             .pad_bottom(2);
 
