@@ -76,6 +76,17 @@ impl Block {
         Block { width, lines }
     }
 
+    /** Fill bottom side of block with given number of the filler character. */
+    pub fn fill_bottom(&self, height: usize, filler: char) -> Block {
+        let padding = repeat(filler, self.width);
+
+        let mut result = self.clone();
+        for _ in 0..height {
+            result.lines.push(padding.clone())
+        }
+        result
+    }
+
     /** Pad right side of block with given number of spaces. */
     pub fn pad_right(&self, width: usize) -> Block {
         self.fill_right(width, ' ')
@@ -88,13 +99,7 @@ impl Block {
 
     /** Pad bottom side of block with given number of empty lines. */
     pub fn pad_bottom(&self, height: usize) -> Block {
-        let padding = adjust_to_len("", self.width);
-
-        let mut result = self.clone();
-        for _ in 0..height {
-            result.lines.push(padding.clone())
-        }
-        result
+        self.fill_bottom(height, ' ')
     }
 
     /** Pad right so given width is reached. */
