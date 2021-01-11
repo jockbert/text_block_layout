@@ -33,3 +33,20 @@ following output:
               =  ─ (2x + sin(2x)) + C
                  4
 ```
+
+Example [overlapping_boxes](examples/overlapping_boxes.rs) shows that blocks can
+be layered over each other. Transperancy character can be configured.
+
+```text
+Blocks can be put on top of each other, with transparency!
+
+OOOOO
+O   O
+O **O****
+O * O   *
+OOOOO   *
+  *     *
+  *     *
+  *     *
+  *******
+```
