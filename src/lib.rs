@@ -285,6 +285,53 @@ impl Block {
         )
     }
 
+    /** Overlays self in front of given block. Treats spaces as transparent
+    characters. */
+    pub fn in_front_of(&self, behind: &Block) -> Block {
+        self.in_front_of_with_transparency(behind, ' ')
+    }
+
+    /** Overlays self in front of given block, showing content of the block
+    behind on the characters defined as transparent. */
+    pub fn in_front_of_with_transparency(&self, behind: &Block, transparency: char) -> Block {
+        // Making sure the blocks is of same size
+        let front = self
+            .fill_right(subtract_or_zero(behind.width(), self.width()), transparency)
+            .fill_bottom(
+                subtract_or_zero(behind.height(), self.height()),
+                transparency,
+            );
+
+        let back = behind
+            .pad_to_width_right(self.width)
+            .pad_to_height_bottom(self.height());
+
+        // Zip characters and make sure frontmost is shown if not transparent
+        let lines = front
+            .lines
+            .iter()
+            .zip(back.lines.iter())
+            .map(|(front_line, back_line)| {
+                front_line
+                    .chars()
+                    .zip(back_line.chars())
+                    .map(|(front_char, back_char)| {
+                        if front_char == transparency {
+                            back_char
+                        } else {
+                            front_char
+                        }
+                    })
+                    .collect::<String>()
+            })
+            .collect::<Vec<String>>();
+
+        Block {
+            width: front.width,
+            lines,
+        }
+    }
+
     /** Render a string from a block using '\n' as separator between lines.
     Trims away whitespace on the right side of each line, just to save on final
     string length. */
