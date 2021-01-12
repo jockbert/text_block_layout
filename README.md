@@ -50,3 +50,37 @@ OOOOO   *
   *     *
   *******
 ```
+
+Example named [invoice](examples/invoice.rs) shows yet another usage example.
+
+```text
+                                           INVOICE
+
+  Acme                                        DATE 2020/01/01
+  Where customers are billed             INVOICE # 12345678
+
+  Address
+  City, State ZIP
+
+
+
+     SHIP TO Name                          BILL TO Name
+             Address                               Address
+             City, State ZIP                       City, State ZIP
+
+
+
+  DESCRIPTION                           UNIT PRICE  QUANTITY     AMMOUNT
+  ──────────────────────────────────────────────────────────────────────
+  Toilet paper, 13-pack                     $ 3.95       200    $ 790.00
+  Coffee, medium ground, 3 lbs              $ 6.95         4     $ 27.80
+  ──────────────────────────────────────────────────────────────────────
+                                                    SUBTOTAL    $ 817.80
+                                                  ──────────────────────
+                                                    TAX RATE         8 %
+                                                  ──────────────────────
+                                                   SALES TAX     $ 65.42
+                                                  ──────────────────────
+                                                       TOTAL    $ 883.22
+                                                  ══════════════════════
+```
