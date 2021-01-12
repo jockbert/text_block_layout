@@ -84,3 +84,7 @@ Example named [invoice](examples/invoice.rs) shows yet another usage example.
                                                        TOTAL    $ 883.22
                                                   ══════════════════════
 ```
+
+## Improvements and contributions
+
+Feel free to open a Github issue or open a pull request.
