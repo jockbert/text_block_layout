@@ -99,6 +99,16 @@ impl Block {
         self.stack_left(&Block::of_text(text))
     }
 
+    /** Add given text lines at bottom of block, incrementing the height
+    accordingly. Width of block will be increades if needed. */
+    pub fn add_multiple_texts(&self, texts: &[String]) -> Block {
+        let addition = texts
+            .iter()
+            .fold(Block::empty(), |acc, text| acc.add_text(text));
+
+        self.stack_left(&addition)
+    }
+
     /** Fill right side of block with given number of the filler character. */
     pub fn fill_right(&self, width: usize, filler: char) -> Block {
         let suffix = repeat(filler, width);
