@@ -79,13 +79,26 @@ impl Block {
         Block::empty().pad_to_height_bottom(height)
     }
 
-    /// Create block containing given text. Gets width of the text and height 1.
-    pub fn of_text(text: &str) -> Block {
-        let width = UnicodeWidthStr::width(text);
+    /// Create block of given text. Uses width of text and height 1.
+    fn of_string(text: String) -> Self {
+        let width = UnicodeWidthStr::width(text.as_str());
         Block {
             width,
             lines: vec![text.to_string()],
         }
+    }
+
+    /// Creates block of any argument implementing `std::string::ToString`
+    /// trait, or implicitly by implementing `std::fmt::Display`. Uses
+    /// String representation in block. See `Block::of_string`.
+    pub fn of<T: ToString>(t: T) -> Block {
+        Block::of_string(t.to_string())
+    }
+
+    /// Create block containing given text. Gets width of the text and height 1.
+    #[deprecated(since = "1.2.0", note = "please use `Block::of` instead")]
+    pub fn of_text(text: &str) -> Block {
+        Block::of(text)
     }
 
     /// Return height of block.
@@ -101,7 +114,7 @@ impl Block {
     /// Add given text at bottom of block, incementing the height. Width of
     /// block will be increased if needed for added line to fit.
     pub fn add_text(&self, text: &str) -> Block {
-        self.stack_left(&Block::of_text(text))
+        self.stack_left(&Block::of(text))
     }
 
     /// Add given text lines at bottom of block, incrementing the height
@@ -360,20 +373,20 @@ impl Block {
 }
 
 impl From<char> for Block {
-    fn from(text: char) -> Self {
-        Block::of_text(&text.to_string())
+    fn from(c: char) -> Self {
+        Block::of(c)
     }
 }
 
 impl From<&str> for Block {
-    fn from(text: &str) -> Self {
-        Block::of_text(text)
+    fn from(s: &str) -> Self {
+        Block::of(s)
     }
 }
 
 impl From<String> for Block {
     fn from(text: String) -> Self {
-        Block::of_text(&text)
+        Block::of_string(text)
     }
 }
 
@@ -385,23 +398,24 @@ impl ToString for Block {
 
 #[cfg(test)]
 mod test {
+    use std::fmt::Display;
+
     use super::*;
 
     #[test]
     fn above() {
-        let a = Block::of_text("aaa");
-        let b = Block::of_text("b").add_text("b").pad_left(1);
+        let a = Block::of("aaa");
+        let b = Block::of("b").add_text("b").pad_left(1);
 
         assert_eq!("aaa", a.render());
         assert_eq!(" b\n b", b.render());
-
         assert_eq!("aaa\n b\n b", a.stack_left(&b).render());
     }
 
     #[test]
     fn trim_right_side_of_lines() {
         // Do not trim whitespace at left or middle of line
-        let b = Block::of_text(" a a   ")
+        let b = Block::of(" a a   ")
             // After trimming, these lines has other width than first line
             .add_text("bbbbb  ")
             .add_text("c  ")
@@ -409,5 +423,41 @@ mod test {
             .pad_bottom(2);
 
         assert_eq!(" a a\nbbbbb\nc\n\n", b.render());
+    }
+
+    #[test]
+    fn from_numbers() {
+        assert_eq!("2.56", Block::of(2.56 as f64).to_string());
+        assert_eq!("2.58", Block::of(2.58 as f32).to_string());
+        assert_eq!("99", Block::of(99).to_string());
+        assert_eq!("99", Block::of(99 as i32).to_string());
+        assert_eq!("99", Block::of(99 as u128).to_string());
+    }
+
+    #[test]
+    fn from_boolean() {
+        assert_eq!("true", Block::of(true).to_string());
+        assert_eq!("false", Block::of(false).to_string());
+    }
+
+    enum SomeEnum {
+        Alfa,
+        Beta,
+    }
+
+    impl Display for SomeEnum {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            let text = match self {
+                SomeEnum::Alfa => "aaa".to_string(),
+                SomeEnum::Beta => "BbBbB".to_string(),
+            };
+            write!(f, "{}", text)
+        }
+    }
+
+    #[test]
+    fn from_display_trait() {
+        assert_eq!("BbBbB", Block::of(SomeEnum::Beta).to_string());
+        assert_eq!("aaa", Block::of(SomeEnum::Alfa).to_string());
     }
 }

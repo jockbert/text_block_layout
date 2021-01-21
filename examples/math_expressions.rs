@@ -3,7 +3,7 @@ use std::cmp::max;
 use text_block_layout::Block;
 
 fn num(n: i64) -> Block {
-    n.to_string().into()
+    Block::of(n)
 }
 
 fn add(a: Block, b: Block) -> Block {
@@ -39,7 +39,7 @@ fn growing_middle_stack(total_height: usize, top: char, middle: char, bottom: ch
 }
 
 fn integral(expr: Block, differential_over_variable: &str) -> Block {
-    let symbol = Block::of_text("⌠").add_text("⎮").add_text("⌡");
+    let symbol = Block::of("⌠").add_text("⎮").add_text("⌡");
 
     symbol
         .pad_right(1)
@@ -51,12 +51,12 @@ fn integral(expr: Block, differential_over_variable: &str) -> Block {
 /// Parenthesises around expression
 fn paren(expr: Block) -> Block {
     let left = match expr.height() {
-        0..=1 => Block::of_text("("),
+        0..=1 => Block::of("("),
         n => growing_middle_stack(n, '⎛', '⎜', '⎝'),
     };
 
     let right = match expr.height() {
-        0..=1 => Block::of_text(")"),
+        0..=1 => Block::of(")"),
         n => growing_middle_stack(n, '⎞', '⎟', '⎠'),
     };
 

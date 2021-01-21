@@ -54,21 +54,21 @@ fn info_single(left_column: usize, title: &str, content_line: &str) -> Block {
 }
 
 fn info(left_column: usize, title: &str, content_lines: &[String]) -> Block {
-    let left = Block::of_text(title).pad_to_width_left(left_column);
+    let left = Block::of(title).pad_to_width_left(left_column);
     let right = Block::empty().add_multiple_texts(content_lines);
     left.pad_right(1).beside_top(&right)
 }
 
 fn money(value: f64, width: usize) -> Block {
-    Block::of_text(&format!["$ {:.2}", value]).pad_to_width_left(width)
+    Block::of(format!["$ {:.2}", value]).pad_to_width_left(width)
 }
 
 /// Create item specification with columns description (36), unit price (12),
 /// quantity (10) and ammount (12)   
 fn item_line(item: &Item) -> Block {
-    let desc = Block::of_text(&item.description).pad_to_width_right(36);
+    let desc = Block::of(&item.description).pad_to_width_right(36);
     let unit = money(item.unit_price, 12);
-    let quant = Block::of_text(&item.quantity.to_string()).pad_to_width_left(10);
+    let quant = Block::of(item.quantity).pad_to_width_left(10);
     let amnt = money(item.ammount(), 12);
     desc.beside_top(&unit).beside_top(&quant).beside_top(&amnt)
 }
@@ -80,12 +80,12 @@ fn create_text_invoice(i: &Invoice) -> Block {
     let right_column = page_width - 32;
 
     // Invoice top -------------------------------------------------------------
-    let company_info = Block::of_text(&i.company_name)
+    let company_info = Block::of(&i.company_name)
         .add_text(&i.company_slogan)
         .pad_bottom(1)
         .add_multiple_texts(&i.company_addres);
 
-    let invoice_info = Block::of_text("INVOICE")
+    let invoice_info = Block::of("INVOICE")
         .pad_to_width_left(10)
         .pad_bottom(1)
         .stack_left(&info_single(info_left_margin, "DATE", &i.date))
@@ -103,11 +103,11 @@ fn create_text_invoice(i: &Invoice) -> Block {
     // Specification -----------------------------------------------------------
     let hline = Block::of_height(1).fill_right(page_width, '─');
 
-    let item_header = Block::of_text("DESCRIPTION")
+    let item_header = Block::of("DESCRIPTION")
         .pad_to_width_right(36)
-        .beside_top(&Block::of_text("UNIT PRICE").pad_to_width_left(12))
-        .beside_top(&Block::of_text("QUANTITY").pad_to_width_left(10))
-        .beside_top(&Block::of_text("AMMOUNT").pad_to_width_left(12));
+        .beside_top(&Block::of("UNIT PRICE").pad_to_width_left(12))
+        .beside_top(&Block::of("QUANTITY").pad_to_width_left(10))
+        .beside_top(&Block::of("AMMOUNT").pad_to_width_left(12));
 
     let items = i
         .items
@@ -124,12 +124,11 @@ fn create_text_invoice(i: &Invoice) -> Block {
     let totals_hline = Block::of_height(1).fill_right(totals_width, '─');
     let totals_hline_thick = Block::of_height(1).fill_right(totals_width, '═');
 
-    let subtotals = Block::of_text("SUBTOTAL").beside_top(&money(i.subtotal(), 12));
-    let tax_rate = Block::of_text("TAX RATE").beside_top(
-        &Block::of_text(&format!("{:.00} %", i.tax_rate * 100.0)).pad_to_width_left(12),
-    );
-    let sales_tax = Block::of_text("SALES TAX").beside_top(&money(i.sales_tax(), 12));
-    let totals = Block::of_text("TOTAL").beside_top(&money(i.total(), 12));
+    let subtotals = Block::of("SUBTOTAL").beside_top(&money(i.subtotal(), 12));
+    let tax_rate = Block::of("TAX RATE")
+        .beside_top(&Block::of(format!("{:.00} %", i.tax_rate * 100.0)).pad_to_width_left(12));
+    let sales_tax = Block::of("SALES TAX").beside_top(&money(i.sales_tax(), 12));
+    let totals = Block::of("TOTAL").beside_top(&money(i.total(), 12));
 
     let totals = subtotals
         .stack_right(&totals_hline)
