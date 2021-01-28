@@ -62,7 +62,7 @@ fn beside_same_height(left: &Block, right: &Block) -> Block {
 
 impl Block {
     /// Create empty block with width and height zero.
-    pub fn empty() -> Block {
+    pub fn empty() -> Self {
         Block {
             width: 0,
             lines: vec![],
@@ -70,12 +70,12 @@ impl Block {
     }
 
     /// Create block of given width and height 0.
-    pub fn of_width(width: usize) -> Block {
+    pub fn of_width(width: usize) -> Self {
         Block::empty().pad_right(width)
     }
 
     /// Create block of given height and width 0.
-    pub fn of_height(height: usize) -> Block {
+    pub fn of_height(height: usize) -> Self {
         Block::empty().pad_to_height_bottom(height)
     }
 
@@ -91,13 +91,13 @@ impl Block {
     /// Creates block of any argument implementing `std::string::ToString`
     /// trait, or implicitly by implementing `std::fmt::Display`. Uses
     /// String representation in block. See `Block::of_string`.
-    pub fn of<T: ToString>(t: T) -> Block {
+    pub fn of<T: ToString>(t: T) -> Self {
         Block::of_string(t.to_string())
     }
 
     /// Create block containing given text. Gets width of the text and height 1.
     #[deprecated(since = "1.2.0", note = "please use `Block::of` instead")]
-    pub fn of_text(text: &str) -> Block {
+    pub fn of_text(text: &str) -> Self {
         Block::of(text)
     }
 
@@ -113,13 +113,13 @@ impl Block {
 
     /// Add given text at bottom of block, incementing the height. Width of
     /// block will be increased if needed for added line to fit.
-    pub fn add_text(&self, text: &str) -> Block {
+    pub fn add_text(&self, text: &str) -> Self {
         self.stack_left(&Block::of(text))
     }
 
     /// Add given text lines at bottom of block, incrementing the height
     /// accordingly. Width of block will be increades if needed.
-    pub fn add_multiple_texts(&self, texts: &[String]) -> Block {
+    pub fn add_multiple_texts(&self, texts: &[String]) -> Self {
         let addition = texts
             .iter()
             .fold(Block::empty(), |acc, text| acc.add_text(text));
@@ -128,7 +128,7 @@ impl Block {
     }
 
     /// Fill right side of block with given number of the filler character.
-    pub fn fill_right(&self, width: usize, filler: char) -> Block {
+    pub fn fill_right(&self, width: usize, filler: char) -> Self {
         let suffix = repeat(filler, width);
 
         let lines = self
@@ -144,7 +144,7 @@ impl Block {
     }
 
     /// Fill bottom side of block with given number of the filler character.
-    pub fn fill_bottom(&self, height: usize, filler: char) -> Block {
+    pub fn fill_bottom(&self, height: usize, filler: char) -> Self {
         let padding = repeat(filler, self.width);
 
         let mut result = self.clone();
@@ -155,38 +155,38 @@ impl Block {
     }
 
     /// Pad right side of block with given number of spaces.
-    pub fn pad_right(&self, width: usize) -> Block {
+    pub fn pad_right(&self, width: usize) -> Self {
         self.fill_right(width, ' ')
     }
 
     /// Pad left side of block with given number of spaces.
-    pub fn pad_left(&self, width: usize) -> Block {
+    pub fn pad_left(&self, width: usize) -> Self {
         Block::of_width(width).beside_top(self)
     }
 
-    pub fn pad_top(&self, height: usize) -> Block {
+    pub fn pad_top(&self, height: usize) -> Self {
         Block::of_height(height).stack_left(self)
     }
 
     /// Pad bottom side of block with given number of empty lines.
-    pub fn pad_bottom(&self, height: usize) -> Block {
+    pub fn pad_bottom(&self, height: usize) -> Self {
         self.fill_bottom(height, ' ')
     }
 
     /// Pad right so given width is reached. Wider block is untouched.
-    pub fn pad_to_width_right(&self, width: usize) -> Block {
+    pub fn pad_to_width_right(&self, width: usize) -> Self {
         self.pad_right(subtract_or_zero(width, self.width))
     }
 
     /// Pad left so given width is reached. Wider block is untouched.
-    pub fn pad_to_width_left(&self, width: usize) -> Block {
+    pub fn pad_to_width_left(&self, width: usize) -> Self {
         self.pad_left(subtract_or_zero(width, self.width))
     }
 
     /// Pad both sides so given width is reached. Wider block is untouched.
     /// If padding needs to be uneven, there will be more padding on the
     /// right side.
-    pub fn pad_to_width_center_right(&self, width: usize) -> Block {
+    pub fn pad_to_width_center_right(&self, width: usize) -> Self {
         let padding = subtract_or_zero(width, self.width);
         let padding_left = padding / 2;
         let padding_right = padding - padding_left;
@@ -196,7 +196,7 @@ impl Block {
     /// Pad both sides so given width is reached. Wider block is untouched.
     /// If padding needs to be uneven, there will be more padding on the
     /// left side.
-    pub fn pad_to_width_center_left(&self, width: usize) -> Block {
+    pub fn pad_to_width_center_left(&self, width: usize) -> Self {
         let padding = subtract_or_zero(width, self.width);
         let padding_right = padding / 2;
         let padding_left = padding - padding_right;
@@ -204,19 +204,19 @@ impl Block {
     }
 
     /// Pad top so given height is reached. Higher block is untouched.
-    pub fn pad_to_height_top(&self, height: usize) -> Block {
+    pub fn pad_to_height_top(&self, height: usize) -> Self {
         self.pad_top(subtract_or_zero(height, self.height()))
     }
 
     /// Pad bottom so given height is reached. Higher block is untouched.
-    pub fn pad_to_height_bottom(&self, height: usize) -> Block {
+    pub fn pad_to_height_bottom(&self, height: usize) -> Self {
         self.pad_bottom(subtract_or_zero(height, self.height()))
     }
 
     /// Pad both top and bottom so given height is reached. Higher block is
     /// untouched. If padding needs to be uneven, there will be more padding
     /// on the top side.
-    pub fn pad_to_height_center_top(&self, height: usize) -> Block {
+    pub fn pad_to_height_center_top(&self, height: usize) -> Self {
         let padding = subtract_or_zero(height, self.height());
         let padding_bottom = padding / 2;
         let padding_top = padding - padding_bottom;
@@ -226,7 +226,7 @@ impl Block {
     /// Pad both top and bottom so given height is reached. Higher block is
     /// untouched. If padding needs to be uneven, there will be more padding
     /// on the bottom side.
-    pub fn pad_to_height_center_bottom(&self, height: usize) -> Block {
+    pub fn pad_to_height_center_bottom(&self, height: usize) -> Self {
         let padding = subtract_or_zero(height, self.height());
         let padding_top = padding / 2;
         let padding_bottom = padding - padding_top;
@@ -235,7 +235,7 @@ impl Block {
 
     /// Join two blocks horizontally, self to the left and the given
     /// block to the right, aligning the top side of the blocks.
-    pub fn beside_top(&self, right: &Block) -> Block {
+    pub fn beside_top(&self, right: &Block) -> Self {
         beside_same_height(
             &self.pad_to_height_bottom(right.height()),
             &right.pad_to_height_bottom(self.height()),
@@ -244,7 +244,7 @@ impl Block {
 
     /// Join two blocks horizontally, self to the left and the given
     /// block to the right, aligning the bottom side of the blocks.
-    pub fn beside_bottom(&self, right: &Block) -> Block {
+    pub fn beside_bottom(&self, right: &Block) -> Self {
         beside_same_height(
             &self.pad_to_height_top(right.height()),
             &right.pad_to_height_top(self.height()),
@@ -255,7 +255,7 @@ impl Block {
     /// block to the right, aligning the center of the blocks.
     /// If padding needs to be uneven, there will be more padding on the
     /// top side.
-    pub fn beside_center_bottom(&self, right: &Block) -> Block {
+    pub fn beside_center_bottom(&self, right: &Block) -> Self {
         beside_same_height(
             &self.pad_to_height_center_top(right.height()),
             &right.pad_to_height_center_top(self.height()),
@@ -266,7 +266,7 @@ impl Block {
     /// block to the right, aligning the center of the blocks.
     /// If padding needs to be uneven, there will be more padding on the
     /// bottom side.
-    pub fn beside_center_top(&self, right: &Block) -> Block {
+    pub fn beside_center_top(&self, right: &Block) -> Self {
         beside_same_height(
             &self.pad_to_height_center_bottom(right.height()),
             &right.pad_to_height_center_bottom(self.height()),
@@ -275,7 +275,7 @@ impl Block {
 
     /// Join two blocks vertically, self on the top and the given
     /// block on the bottom, aligning the right side of the blocks.
-    pub fn stack_right(&self, bottom: &Block) -> Block {
+    pub fn stack_right(&self, bottom: &Block) -> Self {
         stack_same_width(
             &self.pad_to_width_left(bottom.width),
             &bottom.pad_to_width_left(self.width),
@@ -284,7 +284,7 @@ impl Block {
 
     /// Join two blocks vertically, self on the top and the given
     /// block on the bottom, aligning the left side of the blocks.
-    pub fn stack_left(&self, bottom: &Block) -> Block {
+    pub fn stack_left(&self, bottom: &Block) -> Self {
         stack_same_width(
             &self.pad_to_width_right(bottom.width),
             &bottom.pad_to_width_right(self.width),
@@ -295,7 +295,7 @@ impl Block {
     /// block on the bottom, aligning the center of the blocks.
     /// If padding needs to be uneven, there will be more padding on the
     /// right side.
-    pub fn stack_center_left(&self, bottom: &Block) -> Block {
+    pub fn stack_center_left(&self, bottom: &Block) -> Self {
         stack_same_width(
             &self.pad_to_width_center_right(bottom.width),
             &bottom.pad_to_width_center_right(self.width),
@@ -306,7 +306,7 @@ impl Block {
     /// block on the bottom, aligning the center of the blocks.
     /// If padding needs to be uneven, there will be more padding on the
     /// left side.
-    pub fn stack_center_right(&self, bottom: &Block) -> Block {
+    pub fn stack_center_right(&self, bottom: &Block) -> Self {
         stack_same_width(
             &self.pad_to_width_center_left(bottom.width),
             &bottom.pad_to_width_center_left(self.width),
@@ -315,13 +315,13 @@ impl Block {
 
     /// Overlays self in front of given block. Treats spaces as transparent
     /// characters.
-    pub fn in_front_of(&self, behind: &Block) -> Block {
+    pub fn in_front_of(&self, behind: &Block) -> Self {
         self.in_front_of_with_transparency(behind, ' ')
     }
 
     /// Overlays self in front of given block, showing content of the block
     /// behind on the characters defined as transparent.
-    pub fn in_front_of_with_transparency(&self, behind: &Block, transparency: char) -> Block {
+    pub fn in_front_of_with_transparency(&self, behind: &Block, transparency: char) -> Self {
         // Making sure the blocks is of same size
         let front = self
             .fill_right(subtract_or_zero(behind.width(), self.width()), transparency)
