@@ -84,7 +84,7 @@ impl Block {
         let width = UnicodeWidthStr::width(text.as_str());
         Block {
             width,
-            lines: vec![text.to_string()],
+            lines: vec![text],
         }
     }
 
@@ -427,11 +427,11 @@ mod test {
 
     #[test]
     fn from_numbers() {
-        assert_eq!("2.56", Block::of(2.56 as f64).to_string());
-        assert_eq!("2.58", Block::of(2.58 as f32).to_string());
+        assert_eq!("2.56", Block::of(2.56_f64).to_string());
+        assert_eq!("2.58", Block::of(2.58_f32).to_string());
         assert_eq!("99", Block::of(99).to_string());
-        assert_eq!("99", Block::of(99 as i32).to_string());
-        assert_eq!("99", Block::of(99 as u128).to_string());
+        assert_eq!("99", Block::of(99_i32).to_string());
+        assert_eq!("99", Block::of(99_u128).to_string());
     }
 
     #[test]

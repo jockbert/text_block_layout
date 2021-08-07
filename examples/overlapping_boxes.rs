@@ -23,6 +23,6 @@ fn main() {
     let backmost = square('*', 7, 2, 2);
 
     println!("Blocks can be put on top of each other, with transparency!");
-    println!("");
+    println!();
     println!("{}", frontmost.in_front_of(&backmost).to_string());
 }

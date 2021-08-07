@@ -50,7 +50,7 @@ impl Invoice {
 }
 
 fn info_single(left_column: usize, title: &str, content_line: &str) -> Block {
-    info(left_column, title, &vec![content_line.to_string()])
+    info(left_column, title, &[content_line.to_string()])
 }
 
 fn info(left_column: usize, title: &str, content_lines: &[String]) -> Block {
