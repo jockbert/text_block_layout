@@ -1,4 +1,3 @@
-use std::usize;
 use text_block_layout::Block;
 
 struct Item {
