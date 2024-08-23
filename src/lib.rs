@@ -458,3 +458,64 @@ mod test {
         assert_eq!("aaa", Block::of(SomeEnum::Alfa).to_string());
     }
 }
+
+#[cfg(test)]
+mod monkey_test {
+    use super::*;
+    use ::monkey_test::*;
+
+    /// Any block of max size 100x100.
+    fn any_block() -> BoxGen<Block> {
+        let lines = gens::string::any().of_size(..100);
+
+        gens::vec::any(lines).of_size(..100).map(
+            |lines| Block::empty().add_multiple_texts(&lines),
+            |block| block.lines,
+        )
+    }
+
+    fn any_two_blocks() -> BoxGen<(Block, Block)> {
+        any_block().zip(any_block())
+    }
+
+    #[test]
+    fn wont_panic_for_any_char() {
+        monkey_test()
+            .with_generator(any_block())
+            .assert_no_panic(|block| {
+                block.render();
+            });
+    }
+
+    #[test]
+    fn block_width_should_be_max_of_ingoing_stacked_blocks() {
+        monkey_test().with_generator(any_two_blocks()).assert_eq(
+            |(b1, b2)| b1.width.max(b2.width),
+            |(b1, b2)| b1.stack_left(&b2).width,
+        );
+    }
+
+    #[test]
+    fn block_width_should_be_sum_of_ingoing_beside_blocks() {
+        monkey_test().with_generator(any_two_blocks()).assert_eq(
+            |(b1, b2)| b1.width + b2.width,
+            |(b1, b2)| b1.beside_center_top(&b2).width,
+        );
+    }
+
+    #[test]
+    fn block_height_should_be_max_of_ingoing_beside_blocks() {
+        monkey_test().with_generator(any_two_blocks()).assert_eq(
+            |(b1, b2)| b1.height().max(b2.height()),
+            |(b1, b2)| b1.beside_center_bottom(&b2).height(),
+        );
+    }
+
+    #[test]
+    fn block_height_should_be_sum_of_ingoing_stacked_blocks() {
+        monkey_test().with_generator(any_two_blocks()).assert_eq(
+            |(b1, b2)| b1.height() + b2.height(),
+            |(b1, b2)| b1.stack_right(&b2).height(),
+        );
+    }
+}
