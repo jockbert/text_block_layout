@@ -390,9 +390,9 @@ impl From<String> for Block {
     }
 }
 
-impl ToString for Block {
-    fn to_string(&self) -> String {
-        self.render()
+impl std::fmt::Display for Block {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.render())
     }
 }
 

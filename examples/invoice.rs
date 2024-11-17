@@ -164,5 +164,5 @@ fn main() {
         tax_rate: 0.08,
     };
 
-    println!("{}", create_text_invoice(&invoice).to_string());
+    println!("{}", create_text_invoice(&invoice));
 }

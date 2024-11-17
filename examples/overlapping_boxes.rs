@@ -24,5 +24,5 @@ fn main() {
 
     println!("Blocks can be put on top of each other, with transparency!");
     println!();
-    println!("{}", frontmost.in_front_of(&backmost).to_string());
+    println!("{}", frontmost.in_front_of(&backmost));
 }
