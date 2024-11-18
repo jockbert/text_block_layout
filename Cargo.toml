@@ -12,3 +12,10 @@ categories = ["visualization"]
 
 [dependencies]
 unicode-width = "0.2.0"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "add_multiple_texts"
+harness = false
