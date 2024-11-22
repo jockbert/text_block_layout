@@ -87,4 +87,5 @@ Example named [invoice](examples/invoice.rs) shows yet another usage example.
 
 ## Improvements and contributions
 
-Feel free to open a Github issue or open a pull request.
+Feel free to open a issue or open a pull request in
+[the GitHub repository](https://github.com/jockbert/text_block_layout).
