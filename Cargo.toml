@@ -1,6 +1,6 @@
 [package]
 name = "text_block_layout"
-version = "1.2.0"
+version = "1.2.1"
 authors = ["Joakim Akerblom <per.joakim.eriksson@gmail.com>"]
 edition = "2018"
 description = "Library for joining together blocks of text characters, in for example a TUI or text document."
