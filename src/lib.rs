@@ -1,6 +1,7 @@
 use unicode_width::UnicodeWidthStr;
 
-/// Represents a block of some width an height containing text.
+/// Represents a block, i.e. a rectangle, of some width and height containing
+/// text.
 ///
 /// The key feature of a [Block] is that it enables you to easily specify
 /// how chunks of text should be positioned in relation to other block, by
