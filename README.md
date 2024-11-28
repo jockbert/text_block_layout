@@ -8,6 +8,8 @@ blocks of text should be positioned in relation to other block, by joining
 blocks together, either vertically or horizontally, and using paddings and
 fills.
 
+See [change log](CHANGELOG.md) for differences between versions of this crate.
+
 ## Examples
 
 See Examples directory for example uses.
