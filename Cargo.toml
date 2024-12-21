@@ -19,3 +19,12 @@ criterion = { version = "0.5", features = ["html_reports"] }
 [[bench]]
 name = "add_multiple_texts"
 harness = false
+
+[[bench]]
+name = "rendering"
+harness = false
+
+[[bench]]
+name = "join_blocks"
+harness = false
+
