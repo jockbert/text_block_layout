@@ -20,11 +20,7 @@ fn repeat(c: char, times: usize) -> String {
 
 /// Subract usizes and clamp to positive results.
 fn subtract_or_zero(a: usize, b: usize) -> usize {
-    if a > b {
-        a - b
-    } else {
-        0
-    }
+    a.saturating_sub(b)
 }
 
 /// Join two blocks vertically, requiring blocks to have same width.
