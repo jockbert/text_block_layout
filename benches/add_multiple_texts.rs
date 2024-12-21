@@ -1,7 +1,7 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 use text_block_layout::{self, Block};
 
-fn criterion_benchmark(c: &mut Criterion) {
+fn add_multiple_texts(c: &mut Criterion) {
     let texts = vec![
         "foo",
         "bar",
@@ -46,5 +46,5 @@ fn criterion_benchmark(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, criterion_benchmark);
+criterion_group!(benches, add_multiple_texts);
 criterion_main!(benches);
