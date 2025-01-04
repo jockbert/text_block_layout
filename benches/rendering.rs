@@ -1,3 +1,5 @@
+//! Test bench for redering the text of a text block.
+
 use criterion::{criterion_group, criterion_main, Criterion};
 use text_block_layout::{self, Block};
 

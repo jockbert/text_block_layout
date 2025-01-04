@@ -1,3 +1,5 @@
+//! Test bench for joining together different existing blocks.
+
 use criterion::{criterion_group, criterion_main, Criterion};
 use text_block_layout::{self, Block};
 

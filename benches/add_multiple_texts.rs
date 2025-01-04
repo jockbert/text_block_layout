@@ -1,3 +1,5 @@
+//! Test bench for method `Block::add_multiple_texts`.
+
 use criterion::{criterion_group, criterion_main, Criterion};
 use text_block_layout::{self, Block};
 
