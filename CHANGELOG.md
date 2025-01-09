@@ -10,20 +10,20 @@
 
 ## Release 1.2.0 (2021-01-28) [diff](https://github.com/jockbert/text_block_layout/compare/v1.1.0...v1.2.0)
 
-### New features
+### New features in 1.2.0
 
 * Adds generic construction method `Block::of<T: toString>(T) -> Block`. This
   should for example make it easier to create a text block from a number `n`,
   just writing `Block::of(n)` instead of `n.to_string().into()`.
 
-### Other changes
+### Other changes in 1.2.0
 
 * Deprecating method `Block::of_text`, which is a more blunt way to create a
   block from text, compared to `Block::of`.
 
 ## Release 1.1.0 (2021-01-12) [diff](https://github.com/jockbert/text_block_layout/compare/v1.0.0...v1.1.0)
 
-### New features
+### New features in 1.1.0
 
 * Adds possibility to overlay blocks using `Block::in_front_of`.
 * Adds new method `Block::add_multiple_texts` allowing appedning more lines of
@@ -31,14 +31,14 @@
 
 ## Release 1.0.0 (2021-01-10) [diff](https://github.com/jockbert/text_block_layout/compare/v0.1.1...v1.0.0)
 
-### New features
+### New features in 1.0.0
 
 * Make `Block::of_text` handle unicode character count and just not byte length
   of strings, by taking the actual unicode text with into account.
 * Add notion of block alignment when joining them.
 * Enable padding the blocks in all four directions.
 
-### Breaking changes
+### Breaking changes in 1.0.0
 
 * In the name of block alignment, breaking the API by renaming `left_of` to `beside_top` and `above` to `stack_left`.
 * Changing to use references when using a `Block` as argument.
