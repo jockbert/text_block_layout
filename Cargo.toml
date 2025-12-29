@@ -11,10 +11,10 @@ readme = "README.md"
 categories = ["visualization"]
 
 [dependencies]
-unicode-width = "0.2.0"
+unicode-width = "0.2.2"
 
 [dev-dependencies]
-criterion = { version = "0.5", features = ["html_reports"] }
+criterion = { version = "0.8.1", features = ["html_reports"] }
 monkey_test = "0.9.2"
 
 [[bench]]
