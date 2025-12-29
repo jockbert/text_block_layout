@@ -1,9 +1,20 @@
 
 # Changelog
 
-[Show diff of unreleased changes on GitHub](https://github.com/jockbert/text_block_layout/compare/v1.2.1...main).
+[Show diff of unreleased changes on GitHub](https://github.com/jockbert/text_block_layout/compare/v1.2.2...main).
+
+## Release 1.2.2 (2025-12-30) [diff](https://github.com/jockbert/text_block_layout/compare/v1.2.1...v1.2.2)
+
+### Other changes in 1.2.2
+
+* Applies linter suggestions in newer versions of Rust compiler and Clippy.
+* Updates to latest version of dependency `unicode-width`.
+* Updates to latest version of dev dependency `criterion`.
+* Add some property based tests using dev dependency `monkey_test`.
 
 ## Release 1.2.1 (2024-11-22) [diff](https://github.com/jockbert/text_block_layout/compare/v1.2.0...v1.2.1)
+
+### Other changes in 1.2.1
 
 * Applies linter suggestions in newer versions of Rust compiler and Clippy.
 * Updates to latest version of dependency `unicode-width`.
