@@ -15,7 +15,7 @@ pub struct Block {
 
 /// Repeat a character a given ammount of times.
 fn repeat(c: char, times: usize) -> String {
-    std::iter::repeat(c).take(times).collect::<String>()
+    std::iter::repeat_n(c, times).collect::<String>()
 }
 
 /// Subract usizes and clamp to positive results.
